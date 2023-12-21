@@ -1,0 +1,5 @@
+mysql:
+  host: 127.0.0.1
+  user: root             # database username
+  password:              # database password
+  database: oj           # database name
