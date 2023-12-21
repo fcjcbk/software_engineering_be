@@ -3,7 +3,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
 import secure
 from db import user
+from logger import get_logger
 
+logger = get_logger(__name__)
 verify_router = APIRouter()
 
 @verify_router.post("/register")
@@ -34,21 +36,30 @@ class login_request(BaseModel):
 
 @verify_router.post("/login")
 async def login(form_data: login_request, response_model=secure.Token):
+    """
+    登录接口 返回token
+
+    - **account**: 用户的账号，可以是电子邮件或用户ID(ID为数字)
+    - **password**: 用户的密码
+    """
     store_user = user.get_User()
 
+    usr = None
     if '@' in form_data.account:
         usr = store_user.get_by_email(form_data.account)
-    else:
+    elif form_data.account.isdigit():
         usr = store_user.get_user_by_id(int(form_data.account))
     if usr is None:
+        logger.info("User not found")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
     if not secure.verify_password(form_data.password, usr.password):
+        logger.info("Password incorrect")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail="Incorrect password",
         )
     token: secure.Token = secure.create_token(
         secure.TokenData(userid=usr.userid, role=usr.role)
