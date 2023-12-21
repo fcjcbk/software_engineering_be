@@ -66,8 +66,8 @@ async def login(form_data: login_request, response_model=secure.Token):
     )
     return token
 
-
-@verify_router.post("/token", response_model=secure.Token)
+token_router = APIRouter()
+@token_router.post("/token", response_model=secure.Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     store_user = user.get_User()
 

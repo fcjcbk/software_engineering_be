@@ -3,7 +3,7 @@ from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from logger import get_logger
 from db.user import get_User
-from routers.user import verify_router, user_router
+from routers.user import verify_router, user_router, token_router
 
 logger = get_logger(__name__)
 
@@ -18,8 +18,9 @@ app.add_middleware(
 )
 
 
-app.include_router(verify_router)
-app.include_router(user_router)
+app.include_router(token_router)
+app.include_router(verify_router, prefix="/api/v1")
+app.include_router(user_router, prefix="/api/v1")
 
 # for test may delete later
 @app.get("/home")
