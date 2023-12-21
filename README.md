@@ -16,4 +16,12 @@ uvicorn main:app --reload
 ```sh
 # if you add new package please update dependency before commit
 pip freeze > requirements.txt
+
+# check error
+pylint --recurisve=y app
 ```
+
+### docs
+
+- [fastapi](https://fastapi.tiangolo.com/zh/)
+- [mysql](https://dev.mysql.com/doc/connector-python/en/connector-python-example-cursor-transaction.html)
