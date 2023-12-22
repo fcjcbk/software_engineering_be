@@ -1,0 +1,62 @@
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import BaseModel
+import secure
+from db import solution
+from logger import get_logger
+
+logger = get_logger(__name__)
+
+solution_router = APIRouter(
+    prefix="/solution",
+    tags=["solution"],
+    responses={404: {"description": "Not found"}},
+)
+
+@solution_router.get("/problemid/{problemid}")
+async def get_solution_by_problemid(
+    problemid: int,
+    notuse: secure.TokenData = Depends(secure.decode_token),
+    response_model=list[solution.solution_brief]
+    ):
+    store_solution = solution.get_solution()
+    res = store_solution.get_solution_by_problemid(problemid)
+    return res
+
+@solution_router.get("/{solutionid}")
+async def get_solution_by_id(
+    solutionid: int,
+    notuse: secure.TokenData = Depends(secure.decode_token),
+    response_model=solution.solution_rep
+    ):
+    store_solution = solution.get_solution()
+    res = store_solution.get_solution_by_id(solutionid)
+    return res
+
+@solution_router.put("/create")
+async def create_solution(
+    new_solution: solution.solutionModel,
+    tokenDate: secure.TokenData = Depends(secure.decode_token)
+    ):
+    store_solution = solution.get_solution()
+    ok: bool = store_solution.create_solution(new_solution)
+    if not ok:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Create solution failed",
+        )
+    return True
+
+@solution_router.delete("/delete/{solutionid}")
+async def delete_solution(
+    solutionid: int,
+    tokenDate: secure.TokenData = Depends(secure.decode_token)
+    ):
+    store_solution = solution.get_solution()
+    ok: bool = store_solution.delete_solution(solutionid)
+    if not ok:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Delete solution failed",
+        )
+    return True

@@ -13,7 +13,7 @@ class UserModel(BaseModel):
     password: str
     email:  str
     role: int
-    gender: str
+    telephone: str
     major: str
 
 
@@ -23,7 +23,7 @@ class User:
 
 
     def get_users(self) -> list[UserModel]:
-        query: str = "SELECT userid, username, password, email, role, gender, major FROM user"
+        query: str = "SELECT userid, username, password, email, role, telephone, major FROM user"
         cursor = self.database_connect.cursor()
         cursor.execute(query)
         res: list[UserModel] = [
@@ -33,21 +33,21 @@ class User:
                 password=str(password),
                 email=str(email),
                 role=int(role),
-                gender=str(gender),
+                telephone=str(telephone),
                 major=str(major)
-            ) for (userid, username, password, email, role, gender, major) in cursor
+            ) for (userid, username, password, email, role, telephone, major) in cursor
         ]
         return res
 
     def get_user_by_id(self, userid: int) -> Union[UserModel, None]:
-        query: str = "SELECT userid, username, password, email, role, gender, major FROM user WHERE userid = %s"
+        query: str = "SELECT userid, username, password, email, role, telephone, major FROM user WHERE userid = %s"
         cursor = self.database_connect.cursor()
         cursor.execute(query, (userid,))
         row = cursor.fetchone()
         if row is None:
             return None
 
-        userid, username, password, email, role, gender, major = row
+        userid, username, password, email, role, telephone, major = row
 
         user = UserModel(
             userid=int(userid),
@@ -55,7 +55,7 @@ class User:
             password=str(password),
             email=str(email),
             role=int(role),
-            gender=str(gender),
+            telephone=str(telephone),
             major=str(major)
         )
         return user
@@ -63,8 +63,8 @@ class User:
 
     def insert_user(self, new_user: UserModel) -> bool:
         sql: str = """
-        INSERT INTO user (userid, username, password, email, role, gender, major) 
-        VALUES (%(userid)s, %(username)s, %(password)s, %(email)s, %(role)s, %(gender)s, %(major)s)
+        INSERT INTO user (userid, username, password, email, role, telephone, major) 
+        VALUES (%(userid)s, %(username)s, %(password)s, %(email)s, %(role)s, %(telephone)s, %(major)s)
         """
         cursor = self.database_connect.cursor()
         try:
@@ -83,7 +83,7 @@ class User:
                 password = %(password)s, 
                 email = %(email)s, 
                 role = %(role)s, 
-                gender = %(gender)s, 
+                telephone = %(telephone)s, 
                 major = %(major)s
             WHERE userid = %(userid)s
         """
@@ -98,14 +98,14 @@ class User:
 
 
     def get_by_email(self, email: str) -> Union[UserModel, None]:
-        query: str = "SELECT userid, username, password, email, role, gender, major FROM user WHERE email = %s"
+        query: str = "SELECT userid, username, password, email, role, telephone, major FROM user WHERE email = %s"
         cursor = self.database_connect.cursor()
         cursor.execute(query, (email,))
         row = cursor.fetchone()
         if row is None:
             return None
 
-        userid, username, password, email, role, gender, major = row
+        userid, username, password, email, role, telephone, major = row
 
         user = UserModel(
             userid=int(userid),
@@ -113,7 +113,7 @@ class User:
             password=str(password),
             email=str(email),
             role=int(role),
-            gender=str(gender),
+            telephone=str(telephone),
             major=str(major)
         )
         return user

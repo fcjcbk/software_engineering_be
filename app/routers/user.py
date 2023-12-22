@@ -23,7 +23,7 @@ async def register(register_user: user.UserModel, response_model=user.UserModel)
     ok: bool = store_user.insert_user(register_user)
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Insert fail",
         )
     return register_user

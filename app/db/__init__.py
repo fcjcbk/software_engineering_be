@@ -40,23 +40,6 @@ except IOError:
 
 database_connection =  cnx
 
-# cnx = mysql.connector.connect(**config['mysql'])
-
-# cnx.close()
-
-# class emp(BaseModel):
-#     empno: int
-#     ename: str
-
-# cnx = connect_to_mysql(cfg['mysql'])
-# lt: list[emp] = []
-# if cnx is not None:
-#     query: str = "SELECT empno, ename FROM emp"
-#     cursor = cnx.cursor()
-#     cursor.execute(query)
-#     for a in cursor:
-#         # print("{}, {}".format(empno, ename))
-#         lt.append(emp(int(empno=a[0]), ename=a[1]))
-#         # print("{}".format(emp(a)))
-#     print(lt)
-#     cnx.close()
+def close():
+    database_connection.close()
+    logger.info("database connection closed")
