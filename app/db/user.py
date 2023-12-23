@@ -91,6 +91,11 @@ class User:
         try:
             cursor.execute(sql, vars(new_user))
             self.database_connect.commit()
+
+            affect_rows = cursor.rowcount
+            if affect_rows == 0:
+                return False
+
         except Error as e:
             logger.error(e)
             return False
