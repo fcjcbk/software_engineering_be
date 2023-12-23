@@ -7,6 +7,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema OJ
 -- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `OJ` ;
 
 -- -----------------------------------------------------
 -- Schema OJ
@@ -27,8 +28,8 @@ CREATE TABLE IF NOT EXISTS `OJ`.`user` (
   `username` VARCHAR(255) NULL,
   `password` VARCHAR(255) NULL,
   `role` INT NULL,
-  `gender` VARCHAR(255) NULL,
   `major` VARCHAR(255) NULL,
+  `telephone` VARCHAR(255) NULL,
   PRIMARY KEY (`userid`),
   UNIQUE INDEX `userid_UNIQUE` (`userid` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -42,11 +43,11 @@ DROP TABLE IF EXISTS `OJ`.`course` ;
 
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `OJ`.`course` (
-  `courserid` INT NOT NULL,
+  `courseid` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
   `info` VARCHAR(255) NULL,
   `teacherid` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`courserid`),
+  PRIMARY KEY (`courseid`),
   INDEX `fk_course_user1_idx` (`teacherid` ASC) VISIBLE,
   CONSTRAINT `fk_course_user1`
     FOREIGN KEY (`teacherid`)
@@ -64,15 +65,15 @@ DROP TABLE IF EXISTS `OJ`.`homework` ;
 
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `OJ`.`homework` (
-  `homeworkid` INT NOT NULL,
+  `homeworkid` INT NOT NULL AUTO_INCREMENT,
   `homeworkname` VARCHAR(255) NULL,
-  `duedate` DATE NULL,
-  `courserid` INT NOT NULL COMMENT 'the course homework belong to',
+  `duedate` DATETIME NULL,
+  `courseid` INT NOT NULL COMMENT 'the course homework belong to',
   PRIMARY KEY (`homeworkid`),
-  INDEX `fk_homework_course1_idx` (`courserid` ASC) VISIBLE,
+  INDEX `fk_homework_course1_idx` (`courseid` ASC) VISIBLE,
   CONSTRAINT `fk_homework_course1`
-    FOREIGN KEY (`courserid`)
-    REFERENCES `OJ`.`course` (`courserid`)
+    FOREIGN KEY (`courseid`)
+    REFERENCES `OJ`.`course` (`courseid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -86,13 +87,13 @@ DROP TABLE IF EXISTS `OJ`.`problem` ;
 
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `OJ`.`problem` (
-  `problemid` INT NOT NULL,
+  `problemid` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
-  `exType` VARCHAR(255) NULL COMMENT '题目类型',
+  `problemType` VARCHAR(255) NULL COMMENT '题目类型',
   `content` TEXT NULL,
   `point` DOUBLE NULL,
-  `averagepoint` DOUBLE NULL,
   `homeworkid` INT NOT NULL COMMENT 'homework belong to',
+  `difficult` VARCHAR(255) NULL,
   PRIMARY KEY (`problemid`),
   INDEX `fk_problem_homework_idx` (`homeworkid` ASC) VISIBLE,
   CONSTRAINT `fk_problem_homework`
@@ -111,20 +112,21 @@ DROP TABLE IF EXISTS `OJ`.`solution` ;
 
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `OJ`.`solution` (
-  `solutionid` INT NOT NULL,
+  `solutionid` INT NOT NULL AUTO_INCREMENT,
   `content` TEXT NULL COMMENT '答案内容',
   `problemid` INT NOT NULL,
-  `contirbutorid` VARCHAR(255) NOT NULL,
+  `contributorid` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NULL,
   PRIMARY KEY (`solutionid`),
   INDEX `fk_solution_problem1_idx` (`problemid` ASC) VISIBLE,
-  INDEX `fk_solution_user1_idx` (`contirbutorid` ASC) VISIBLE,
+  INDEX `fk_solution_user1_idx` (`contributorid` ASC) VISIBLE,
   CONSTRAINT `fk_solution_problem1`
     FOREIGN KEY (`problemid`)
     REFERENCES `OJ`.`problem` (`problemid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_solution_user1`
-    FOREIGN KEY (`contirbutorid`)
+    FOREIGN KEY (`contributorid`)
     REFERENCES `OJ`.`user` (`userid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -139,7 +141,7 @@ DROP TABLE IF EXISTS `OJ`.`comment` ;
 
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `OJ`.`comment` (
-  `commentid` INT NOT NULL,
+  `commentid` INT NOT NULL AUTO_INCREMENT,
   `content` TEXT NULL,
   `createAt` DATE NULL,
   `solutionid` INT NOT NULL,
@@ -169,21 +171,21 @@ DROP TABLE IF EXISTS `OJ`.`stu_course` ;
 
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `OJ`.`stu_course` (
-  `courserid` INT NOT NULL,
+  `courseid` INT NOT NULL,
   `userid` VARCHAR(255) NOT NULL,
   INDEX `fk_stu_course_user1_idx` (`userid` ASC) VISIBLE,
-  INDEX `fk_stu_course_course1_idx` (`courserid` ASC) VISIBLE,
-  PRIMARY KEY (`courserid`, `userid`),
+  INDEX `fk_stu_course_course1_idx` (`courseid` ASC) VISIBLE,
+  PRIMARY KEY (`courseid`, `userid`),
   CONSTRAINT `fk_stu_course_user1`
     FOREIGN KEY (`userid`)
     REFERENCES `OJ`.`user` (`userid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_stu_course_course1`
-    FOREIGN KEY (`courserid`)
-    REFERENCES `OJ`.`course` (`courserid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    FOREIGN KEY (`courseid`)
+    REFERENCES `OJ`.`course` (`courseid`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -197,7 +199,7 @@ SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `OJ`.`attempt` (
   `problemid` INT NOT NULL,
   `studentid` VARCHAR(255) NOT NULL,
-  `point` DOUBLE NULL COMMENT 'the point student get in this problem',
+  `point` DOUBLE NULL COMMENT 'the point student get in this problem\n',
   `content` TEXT NULL,
   INDEX `fk_attempt_problem1_idx` (`problemid` ASC) VISIBLE,
   INDEX `fk_attempt_user1_idx` (`studentid` ASC) VISIBLE,
@@ -205,13 +207,36 @@ CREATE TABLE IF NOT EXISTS `OJ`.`attempt` (
   CONSTRAINT `fk_attempt_problem1`
     FOREIGN KEY (`problemid`)
     REFERENCES `OJ`.`problem` (`problemid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_attempt_user1`
     FOREIGN KEY (`studentid`)
     REFERENCES `OJ`.`user` (`userid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Table `OJ`.`choice`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `OJ`.`choice` ;
+
+SHOW WARNINGS;
+CREATE TABLE IF NOT EXISTS `OJ`.`choice` (
+  `problemid` INT NOT NULL,
+  `choiceid` INT NOT NULL AUTO_INCREMENT,
+  `content` TEXT NULL,
+  `label` VARCHAR(45) NULL,
+  `iscorrect` TINYINT NULL COMMENT 'zero is false one is true',
+  INDEX `fk_choices_problem1_idx` (`problemid` ASC) VISIBLE,
+  PRIMARY KEY (`choiceid`),
+  CONSTRAINT `fk_choices_problem1`
+    FOREIGN KEY (`problemid`)
+    REFERENCES `OJ`.`problem` (`problemid`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
