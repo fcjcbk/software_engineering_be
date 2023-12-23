@@ -13,6 +13,11 @@ course_router = APIRouter(
     responses={404: {"description": "no such course"}},
 )
 
+class course_req(BaseModel):
+    name: str
+    info: str
+    teacherid: int
+
 # Todo: may miss error handling
 @course_router.get("/student")
 async def get_course_by_student_id(tokenData: secure.TokenData = Depends(secure.decode_token)):
@@ -28,8 +33,7 @@ async def get_course_by_teacher_id(tokenData: secure.TokenData = Depends(secure.
 
 @course_router.post("/create")
 async def create_course(
-        new_course: course.courseModel,
-        response_model=course.courseModel,
+        new_course: course_req,
         tokenData: secure.TokenData = Depends(secure.decode_token)
     ):
     if tokenData.role not in (1, 2):
@@ -38,7 +42,9 @@ async def create_course(
             detail="Permission denied",
         )
     store_course = course.get_course()
-    ok: bool = store_course.create_course(new_course)
+    insert_course: course.courseModel = course.courseModel(**dict(new_course))
+
+    ok: bool = store_course.create_course(insert_course)
 
     if not ok:
         raise HTTPException(
@@ -46,7 +52,7 @@ async def create_course(
             detail="Create course failed",
         )
     # Todo: may change response
-    return new_course
+    return True
 
 # Todo: may change response
 @course_router.delete("/delete/{courseid}")

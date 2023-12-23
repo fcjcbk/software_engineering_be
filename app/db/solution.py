@@ -53,12 +53,17 @@ class Solution:
         logger.info("create_solution: %s", solution.content)
 
         query: str = """
-        INSERT INTO solution (solutionid, name, content, problemid, contributorid)
-        VALUES (%(solutionid)s, %(name)s, %(content)s, %(problemid)s, %(contributorid)s)
+        INSERT INTO solution (name, content, problemid, contributorid)
+        VALUES (%(name)s, %(content)s, %(problemid)s, %(contributorid)s)
         """
         try:
             cursor = self.database_connect.cursor()
-            cursor.execute(query, dict(solution))
+            cursor.execute(query, {
+                'name': solution.name,
+                'content': solution.content,
+                'problemid': solution.problemid,
+                'contributorid': solution.contributorid
+            })
             self.database_connect.commit()
         except Error as e:
             logger.error("create_solution: %s", e)

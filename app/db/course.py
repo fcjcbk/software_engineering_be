@@ -7,7 +7,7 @@ from logger import get_logger
 logger = get_logger(__name__)
 
 class courseModel(BaseModel):
-    courseid: int
+    courseid: int | None = None
     name: str
     info: str
     teacherid: int
@@ -64,12 +64,16 @@ class Course:
         logger.info("create_course: %s", course)
 
         query: str = """
-        INSERT INTO course (courseid, name, info, teacherid) 
-        VALUES (%(courseid)s, %(name)s, %(info)s, %(teacherid)s)
+        INSERT INTO course (name, info, teacherid) 
+        VALUES (%(name)s, %(info)s, %(teacherid)s)
         """
         cursor = self.database_connect.cursor()
         try:
-            cursor.execute(query, dict(course))
+            cursor.execute(query, {
+                "name": course.name,
+                "info": course.info,
+                "teacherid": course.teacherid
+            })
             self.database_connect.commit()
         except Error as e:
             logger.error(e)

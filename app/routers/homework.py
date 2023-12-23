@@ -13,6 +13,11 @@ homework_router = APIRouter(
     responses={404: {"msg": "no route found"}}
 )
 
+class homework_req(BaseModel):
+    homeworkname: str
+    duedate: str
+    courseid: int
+
 @homework_router.get("/{courseid}")
 async def get_homework(
     courseid: int,
@@ -24,7 +29,7 @@ async def get_homework(
 
 @homework_router.put("/create")
 async def create_homework(
-    new_homework: homework.homeworkModel,
+    new_homework: homework_req,
     tokenDate: secure.TokenData = Depends(secure.decode_token)
     ):
     if tokenDate.role not in (1, 2):
@@ -33,7 +38,10 @@ async def create_homework(
             detail="Permission denied",
         )
     store_homework = homework.get_homework()
-    ok: bool = store_homework.create_homework(new_homework)
+
+    insert_homework: homework.homeworkModel = homework.homeworkModel(**dict(new_homework))
+
+    ok: bool = store_homework.create_homework(insert_homework)
     if not ok:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

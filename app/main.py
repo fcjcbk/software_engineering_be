@@ -8,6 +8,7 @@ from routers.user import verify_router, user_router, token_router
 from routers.course import course_router
 from routers.homework import homework_router
 from routers.solution import solution_router
+from routers.problem import problem_router
 
 logger = get_logger(__name__)
 
@@ -32,6 +33,7 @@ app.include_router(user_router, prefix="/api/v1")
 app.include_router(course_router, prefix="/api/v1")
 app.include_router(homework_router, prefix="/api/v1")
 app.include_router(solution_router, prefix="/api/v1")
+app.include_router(problem_router, prefix="/api/v1")
 
 # for test may delete later
 @app.get("/home")

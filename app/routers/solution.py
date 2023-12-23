@@ -13,6 +13,12 @@ solution_router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+class solution_req(BaseModel):
+    problemid: int
+    content: str
+    userid: int
+    homeworkid: int
+
 @solution_router.get("/problemid/{problemid}")
 async def get_solution_by_problemid(
     problemid: int,
@@ -35,11 +41,13 @@ async def get_solution_by_id(
 
 @solution_router.put("/create")
 async def create_solution(
-    new_solution: solution.solutionModel,
+    new_solution: solution_req,
     tokenDate: secure.TokenData = Depends(secure.decode_token)
     ):
     store_solution = solution.get_solution()
-    ok: bool = store_solution.create_solution(new_solution)
+
+    insert_solution: solution.solutionModel = solution.solutionModel(**dict(new_solution))
+    ok: bool = store_solution.create_solution(insert_solution)
     if not ok:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

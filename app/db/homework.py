@@ -8,7 +8,7 @@ from datetime import datetime
 logger = get_logger(__name__)
 
 class homeworkModel(BaseModel):
-    homeworkid: int
+    homeworkid: int | None = None
     homeworkname: str
     duedate: datetime
     courseid: int
@@ -37,12 +37,16 @@ class Homework:
         logger.info("create_homework: %s", homework.homeworkname)
 
         query: str = """
-        INSERT INTO homework (homeworkid, homeworkname, duedate, courseid)
-        VALUES (%(homeworkid)s, %(homeworkname)s, %(duedate)s, %(courseid)s)
+        INSERT INTO homework (homeworkname, duedate, courseid)
+        VALUES (%(homeworkname)s, %(duedate)s, %(courseid)s)
         """
         try:
             cursor = self.database_connect.cursor()
-            cursor.execute(query, dict(homework))
+            cursor.execute(query, {
+                'homeworkname': homework.homeworkname,
+                'duedate': homework.duedate,
+                'courseid': homework.courseid
+            })
             self.database_connect.commit()
         except Error as e:
             logger.error("create_homework: %s", e)

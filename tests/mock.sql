@@ -32,19 +32,19 @@ INSERT INTO user VALUES(1234,  '1234@qq.com', 'teacher', '$2b$12$LSEV/rZCRFu7efP
   "teacherid": 1234
 } */
 
-INSERT INTO course VALUES(0, 'course', 'string', 1234);
+INSERT INTO course (name, info, teacherid) VALUES('course', 'string', 1234);
 
 /* homeowrk
 {
   "homeworkid": 0,
   "homeworkname": "homework",
   "duedate": "2023-12-22T13:57:25.999Z",
-  "courseid": 0
+  "courseid": 1
 } */
 
-INSERT INTO homework VALUES(0, 'homework', '2023-12-22 13:57:25.999', 0);
+INSERT INTO homework (homeowrkname, duedate, courseid) VALUES('homework', '2023-12-22 13:57:25.999', 1);
 
-insert into problem values(0, "problem", "blank", "problem-content", 10, 0, "hard");
+insert into problem ()values(0, "problem", "blank", "problem-content", 10, 0, "hard");
 
 /* {
   "solutionid": 0,
@@ -54,4 +54,31 @@ insert into problem values(0, "problem", "blank", "problem-content", 10, 0, "har
   "contributorid": 123
 } */
 
-INSERT INTO solution value(0,  "content of solution", 0, 123, "solution");
+INSERT INTO solution (contetn, problemid, contributorid, name) value("content of solution", 0, 123, "solution");
+
+/* {
+  "problemid": 1,
+  "name": "problem_name",
+  "problemType": "blank",
+  "content": "this is description of problem",
+  "point": 10,
+  "difficult": "hard",
+  "homeworkid": 1,
+  "choice": 2
+    {
+      "choiceid": 0,
+      "content": "choice_1",
+      "problemid": 1,
+      "label": "A",
+      "iscorrect": true
+    },
+   {
+      "choiceid": 1,
+      "content": "choice_2",
+      "problemid": 1,
+      "label": "B",
+      "iscorrect": false
+    }
+  ]
+} */
+insert into choice (problemid, content, label, iscorrect) values(0, "choice_1", "A", 1);
