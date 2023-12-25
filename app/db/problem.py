@@ -124,8 +124,7 @@ class problem:
                 "homeworkid": new_problem.homeworkid
             })
 
-            cursor.execute("SELECT LAST_INSERT_ID()")
-            problem_id = cursor.fetchone()[0]
+            problem_id = cursor.lastrowid
 
             sql: str = """
             INSERT INTO choice (content, problemid, label, iscorrect)
