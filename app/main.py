@@ -29,6 +29,7 @@ async def shutdown_event():
     logger.info("shutdown")
     close()
 
+# the path may be change
 app.include_router(verify_router, prefix="/api/v1")
 app.include_router(user_router, prefix="/api/v1")
 app.include_router(course_router, prefix="/api/v1")

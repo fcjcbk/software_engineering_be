@@ -143,9 +143,8 @@ SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `OJ`.`comment` (
   `commentid` INT NOT NULL AUTO_INCREMENT,
   `content` TEXT NULL,
-  `createAt` DATE NULL,
+  `createAt` DATETIME NULL,
   `solutionid` INT NOT NULL,
-  `updateAt` DATE NULL,
   `contributorid` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`commentid`),
   INDEX `fk_comment_solution1_idx` (`solutionid` ASC) VISIBLE,
@@ -199,7 +198,7 @@ SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `OJ`.`attempt` (
   `problemid` INT NOT NULL,
   `studentid` VARCHAR(255) NOT NULL,
-  `point` DOUBLE NULL COMMENT 'the point student get in this problem\n',
+  `point` DOUBLE NULL DEFAULT 0 COMMENT 'the point student get in this problem\n',
   `content` TEXT NULL,
   INDEX `fk_attempt_problem1_idx` (`problemid` ASC) VISIBLE,
   INDEX `fk_attempt_user1_idx` (`studentid` ASC) VISIBLE,
