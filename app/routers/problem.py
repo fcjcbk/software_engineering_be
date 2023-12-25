@@ -36,7 +36,7 @@ async def  get_problem_by_id(
         )
     return res
 
-@problem_router.get("/homeworkid/{homeworkid}")
+@problem_router.get("/homework/{homeworkid}")
 async def get_problem_by_homeworkid(
     homeworkid: int,
     notuse: secure.TokenData = Depends(secure.decode_token),

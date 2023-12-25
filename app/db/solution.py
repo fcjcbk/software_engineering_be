@@ -7,7 +7,7 @@ from logger import get_logger
 logger = get_logger(__name__)
 
 class solutionModel(BaseModel):
-    solutionid: int
+    solutionid: int | None = None
     name: str
     content: str
     problemid: int

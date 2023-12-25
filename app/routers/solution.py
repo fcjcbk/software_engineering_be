@@ -16,8 +16,8 @@ solution_router = APIRouter(
 class solution_req(BaseModel):
     problemid: int
     content: str
-    userid: int
-    homeworkid: int
+    contributorid: int
+    name: str
 
 @solution_router.get("/problemid/{problemid}")
 async def get_solution_by_problemid(

@@ -42,7 +42,7 @@ INSERT INTO course (name, info, teacherid) VALUES('course', 'string', 1234);
   "courseid": 1
 } */
 
-INSERT INTO homework (homeowrkname, duedate, courseid) VALUES('homework', '2023-12-22 13:57:25.999', 1);
+INSERT INTO homework (homeworkname, duedate, courseid) VALUES('homework', '2023-12-22 13:57:25.999', 1);
 
 insert into problem ()values(0, "problem", "blank", "problem-content", 10, 0, "hard");
 
@@ -54,7 +54,7 @@ insert into problem ()values(0, "problem", "blank", "problem-content", 10, 0, "h
   "contributorid": 123
 } */
 
-INSERT INTO solution (contetn, problemid, contributorid, name) value("content of solution", 0, 123, "solution");
+INSERT INTO solution (content, problemid, contributorid, name) value("content of solution", 0, 123, "solution");
 
 /* {
   "problemid": 1,
@@ -64,7 +64,7 @@ INSERT INTO solution (contetn, problemid, contributorid, name) value("content of
   "point": 10,
   "difficult": "hard",
   "homeworkid": 1,
-  "choice": 2
+  "choice": [
     {
       "choiceid": 0,
       "content": "choice_1",

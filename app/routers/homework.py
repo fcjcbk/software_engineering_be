@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
+from datetime import datetime
 import secure
 from db import homework
 from logger import get_logger
@@ -15,7 +16,7 @@ homework_router = APIRouter(
 
 class homework_req(BaseModel):
     homeworkname: str
-    duedate: str
+    duedate: datetime
     courseid: int
 
 @homework_router.get("/{courseid}")
