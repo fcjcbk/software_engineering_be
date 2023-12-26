@@ -1,8 +1,8 @@
-from db import database_connection
+from app.db import database_connection
+from app.logger import get_logger
 from pydantic import BaseModel
 from typing import Union
 from mysql.connector import Error
-from logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -145,27 +145,6 @@ class problem:
             logger.error("create_problem: %s", e)
             return False
 
-        # sql: str = """
-        # INSERT INTO choice (content, problemid, label, iscorrect)
-        # VALUES (%(content)s, %(problemid)s, %(label)s, %(iscorrect)s)
-        # """
-
-        # if  new_problem.choice is None:
-        #     return True
-
-        # for choice in new_problem.choice:
-        #     try:
-        #         cursor = self.database_connect.cursor()
-        #         cursor.execute(sql, {
-        #             "content": choice.content,
-        #             "problemid": choice.problemid,
-        #             "label": choice.label,
-        #             "iscorrect": choice.iscorrect
-        #         })
-        #         self.database_connect.commit()
-        #     except Error as e:
-        #         logger.error("create_problem_choice: %s", e)
-        #         return False
         return True
 
     def delete_problem(self, problemid: int) -> bool:

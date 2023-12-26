@@ -3,7 +3,7 @@ import yaml
 import time
 import sys
 from pydantic import BaseModel
-from logger import get_logger
+from app.logger import get_logger
 
 logger =  get_logger(__name__)
 
@@ -30,7 +30,7 @@ def connect_to_mysql(config, attempts=3, delay=2):
     return None
 
 try:
-    with open('../config/server.yaml', 'r', encoding="UTF-8") as file:
+    with open('config/server.yaml', 'r', encoding="UTF-8") as file:
         cfg = yaml.safe_load(file)
         cnx = mysql.connector.connect(**cfg['mysql'])
 

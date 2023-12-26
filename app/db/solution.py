@@ -1,8 +1,8 @@
-from db import database_connection
+from app.db import database_connection
+from app.logger import get_logger
 from pydantic import BaseModel
 from typing import Union
 from mysql.connector import Error
-from logger import get_logger
 
 logger = get_logger(__name__)
 

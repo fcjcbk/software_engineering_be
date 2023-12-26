@@ -1,16 +1,16 @@
 from fastapi import FastAPI
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.middleware.cors import CORSMiddleware
-from logger import get_logger
-from db import close
-from db.user import get_User
-from routers.user import verify_router, user_router
-from routers.course import course_router
-from routers.homework import homework_router
-from routers.solution import solution_router
-from routers.problem import problem_router
-from routers.attempt import attempt_router
-from routers.comment import comment_router
+from app.logger import get_logger
+from app.db import close
+from app.db.user import get_User
+from app.routers.user import verify_router, user_router
+from app.routers.course import course_router
+from app.routers.homework import homework_router
+from app.routers.solution import solution_router
+from app.routers.problem import problem_router
+from app.routers.attempt import attempt_router
+from app.routers.comment import comment_router
 
 logger = get_logger(__name__)
 

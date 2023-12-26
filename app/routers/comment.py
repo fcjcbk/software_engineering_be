@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from datetime import datetime
-import secure
-from db import comment
-from logger import get_logger
+from app import secure
+from app.db import comment
+from app.logger import get_logger
 
 logger = get_logger(__name__)
 

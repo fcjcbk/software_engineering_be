@@ -8,8 +8,10 @@ pip install -r requirements.txt
 ### start and Hot-Reload for Development
 
 ```sh
-cd app
-uvicorn main:app --reload
+uvicorn app.main:app --reload
+
+# expose to local area network
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
 ### before commit
