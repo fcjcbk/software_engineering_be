@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from app.logger import get_logger
 from app.db import close
 from app.db.user import get_User
@@ -14,7 +15,13 @@ from app.routers.comment import comment_router
 
 logger = get_logger(__name__)
 
-app = FastAPI(debug=True)
+@asynccontextmanager
+async def lifesapn(server: FastAPI):
+    yield
+    logger.info("shutdown")
+    close()
+
+app = FastAPI(debug=True, lifespan=lifesapn)
 
 app.add_middleware(
     CORSMiddleware,
@@ -23,11 +30,6 @@ app.add_middleware(
     allow_methods=["HEAD", "GET", "POST", "PUT", "DELETE, PATCH, OPTIONS"],
     allow_headers=["authorization", "origin", "content-type", "accept"],
 )
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    logger.info("shutdown")
-    close()
 
 # the path may be change
 app.include_router(verify_router, prefix="/api/v1")

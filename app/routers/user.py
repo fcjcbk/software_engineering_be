@@ -49,6 +49,7 @@ async def login(form_data: login_request, response_model=secure.Token):
         usr = store_user.get_by_email(form_data.account)
     elif form_data.account.isdigit():
         usr = store_user.get_user_by_id(int(form_data.account))
+
     if usr is None:
         logger.info("User not found")
         raise HTTPException(
