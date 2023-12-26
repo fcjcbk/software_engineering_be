@@ -20,13 +20,19 @@ class course_req(BaseModel):
 
 # Todo: may miss error handling
 @course_router.get("/student")
-async def get_course_by_student_id(tokenData: secure.TokenData = Depends(secure.decode_token)):
+async def get_course_by_student_id(
+    tokenData: secure.TokenData = Depends(secure.decode_token),
+    response_model=list[course.courseModel],
+    ) -> list[course.courseModel]:
     store_course = course.get_course()
     res = store_course.get_course_by_student_id(tokenData.userid)
     return res
 
 @course_router.get("/teacher")
-async def get_course_by_teacher_id(tokenData: secure.TokenData = Depends(secure.decode_token)):
+async def get_course_by_teacher_id(
+    tokenData: secure.TokenData = Depends(secure.decode_token),
+    response_model=list[course.courseModel],
+    ) -> list[course.courseModel]:
     store_course = course.get_course()
     res = store_course.get_course_by_teacher_id(tokenData.userid)
     return res

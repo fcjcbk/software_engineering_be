@@ -24,7 +24,7 @@ async def get_solution_by_problemid(
     problemid: int,
     notuse: secure.TokenData = Depends(secure.decode_token),
     response_model=list[solution.solution_brief]
-    ):
+    ) -> list[solution.solution_brief]:
     store_solution = solution.get_solution()
     res = store_solution.get_solution_by_problemid(problemid)
     return res
@@ -34,9 +34,14 @@ async def get_solution_by_id(
     solutionid: int,
     notuse: secure.TokenData = Depends(secure.decode_token),
     response_model=solution.solution_rep
-    ):
+    ) -> solution.solution_rep:
     store_solution = solution.get_solution()
     res = store_solution.get_solution_by_id(solutionid)
+    if res is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Solution not found",
+        )
     return res
 
 @solution_router.put("/create")

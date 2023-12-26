@@ -19,7 +19,7 @@ async def get_comment_by_solutionid(
     solutionid: int,
     notuse: secure.TokenData = Depends(secure.decode_token),
     response_model=list[comment.comment_rep]
-    ):
+    ) -> list[comment.comment_rep]:
     store_comment = comment.get_comment()
     res = store_comment.get_comment_by_solutionid_rep(solutionid)
     return res

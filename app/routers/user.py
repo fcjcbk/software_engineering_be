@@ -9,7 +9,7 @@ logger = get_logger(__name__)
 verify_router = APIRouter()
 
 @verify_router.post("/register")
-async def register(register_user: user.UserModel, response_model=user.UserModel):
+async def register(register_user: user.UserModel, response_model=user.UserModel) -> user.UserModel:
     store_user = user.get_User()
 
     usr = store_user.get_user_by_id(register_user.userid)
@@ -35,7 +35,7 @@ class login_request(BaseModel):
 
 
 @verify_router.post("/login")
-async def login(form_data: login_request, response_model=secure.Token):
+async def login(form_data: login_request, response_model=secure.Token) -> secure.Token:
     """
     登录接口 返回token
 
@@ -101,7 +101,7 @@ user_router = APIRouter(
 
 # Todo: response_model may be change
 @user_router.get("/{userid}")
-async def get_user_info(userid: int, response_model=user.UserModel):
+async def get_user_info(userid: int, response_model=user.UserModel) -> user.UserModel:
     store_user = user.get_User()
     usr = store_user.get_user_by_id(userid)
     if usr is None:

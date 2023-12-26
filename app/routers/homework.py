@@ -24,7 +24,7 @@ async def get_homework(
     courseid: int,
     response_model=list[homework.homeworkModel],
     tokenDate: secure.TokenData = Depends(secure.decode_token)
-    ):
+    ) -> list[homework.homeworkModel]:
     store_homework = homework.get_homework()
     return store_homework.get_homework(courseid)
 

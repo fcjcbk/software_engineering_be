@@ -17,8 +17,9 @@ attempt_router = APIRouter(
 @attempt_router.get("/problem/{problemid}")
 async def get_attempt_by_problemid(
     problemid: int,
-    tokenData: secure.TokenData = Depends(secure.decode_token)
-    ):
+    tokenData: secure.TokenData = Depends(secure.decode_token),
+    response_model=list[attempt.attemptModel]
+    ) -> list[attempt.attemptModel]:
 
     if tokenData.role not in (1, 2):
         raise HTTPException(
@@ -34,8 +35,9 @@ async def get_attempt_by_problemid(
 async def get_attempt(
     problemid: int,
     studentid: int,
-    tokenData: secure.TokenData = Depends(secure.decode_token)
-    ):
+    tokenData: secure.TokenData = Depends(secure.decode_token),
+    response_model=attempt.attemptModel
+    ) -> attempt.attemptModel:
 
     store_attempt = attempt.get_attempt()
     res = store_attempt.get_attempt(problemid, studentid)
@@ -53,7 +55,7 @@ class attempt_create_req(BaseModel):
 @attempt_router.put("/create")
 async def create_attempt(
     new_attempt: attempt_create_req,
-    tokenData: secure.TokenData = Depends(secure.decode_token)
+    tokenData: secure.TokenData = Depends(secure.decode_token),
     ):
 
     if tokenData.role != 0:

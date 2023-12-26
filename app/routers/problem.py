@@ -25,7 +25,7 @@ async def  get_problem_by_id(
     problemid: int,
     notuse: secure.TokenData = Depends(secure.decode_token),
     response_model=problem.problemModel
-    ):
+    )-> problem.problemModel:
     store_problem = problem.get_problem()
     res = store_problem.get_problem_by_id(problemid)
 
@@ -41,10 +41,20 @@ async def get_problem_by_homeworkid(
     homeworkid: int,
     notuse: secure.TokenData = Depends(secure.decode_token),
     response_model=list[problem_brief]
-    ):
+    ) -> list[problem_brief]:
     store_problem = problem.get_problem()
     res = store_problem.get_problem_by_homeworkid(homeworkid)
-    return res
+
+    problem_brief_list = [
+        problem_brief(
+            problemid=problem.problemid if problem.problemid is not None else 0,
+            name=problem.name,
+            problemType=problem.problemType,
+            point=problem.point,
+            difficult=problem.difficult
+        ) for problem in res
+    ]
+    return problem_brief_list
 
 class choice_req(BaseModel):
     content: str
