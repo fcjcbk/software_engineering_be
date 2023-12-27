@@ -94,16 +94,33 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 user_router = APIRouter(
     prefix="/user",
     tags=["user"],
-    dependencies=[Depends(secure.decode_token)],
     # Todo: response may be change
     responses={404: {"msg": "no such user"}}
 )
 
 # Todo: response_model may be change
 @user_router.get("/{userid}")
-async def get_user_info(userid: int, response_model=user.UserModel) -> user.UserModel:
+async def get_user_info(
+    userid: int,
+    response_model=user.UserModel,
+    tokenDate: secure.TokenData = Depends(secure.decode_token),
+    ) -> user.UserModel:
     store_user = user.get_User()
     usr = store_user.get_user_by_id(userid)
+    if usr is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+    return usr
+
+@user_router.get("/")
+async def get_current(
+    tokenDate: secure.TokenData = Depends(secure.decode_token),
+    response_model=user.UserModel
+    ) -> user.UserModel:
+    store_user = user.get_User()
+    usr = store_user.get_user_by_id(tokenDate.userid)
     if usr is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
