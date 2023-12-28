@@ -120,3 +120,24 @@ async def cancel_course(
             detail="Cancel course failed",
         )
     return ok
+
+
+@course_router.get("/unselected")
+async def get_unselected_course(
+    tokenData: secure.TokenData = Depends(secure.decode_token),
+    response_model=list[course.select_course_rep],
+    ) -> list[course.select_course_rep]:
+    if tokenData.role != 0:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Permission denied",
+        )
+    store_course = course.get_course()
+    res = store_course.get_unselected_course(tokenData.userid)
+
+    if res is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No course",
+        )
+    return res

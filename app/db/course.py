@@ -16,6 +16,13 @@ class StuCourseModel(BaseModel):
     courseid: int
     userid: int
 
+class select_course_rep(BaseModel):
+    courseid: int
+    name: str
+    info: str
+    teacherid: int
+    teachername: str
+
 
 class Course:
     def __init__(self, database_conect):
@@ -127,6 +134,37 @@ class Course:
             logger.error(e)
             return False
         return True
+
+    def get_unselected_course(self, userid: int) -> list[select_course_rep] | None:
+        logger.info("get_unselected_course: %d", userid)
+        sql = """
+        SELECT course.courseid, course.name, course.info, course.teacherid, user.username
+          FROM course
+          JOIN user
+            ON course.teacherid = user.userid
+         WHERE course.courseid NOT IN (
+            SELECT courseid
+              FROM stu_course
+             WHERE userid = %s
+         )
+        """
+        try:
+            cursor = self.database_connect.cursor()
+            cursor.execute(sql, (userid,))
+            res: list[select_course_rep] = [
+                select_course_rep(
+                    courseid=int(courseid),
+                    name=str(name),
+                    info=str(info),
+                    teacherid=int(teacherid),
+                    teachername=str(teachername)
+                ) for (courseid, name, info, teacherid, teachername) in cursor
+            ]
+            logger.info("get_unselected_course userid = %d: %s", userid, res)
+        except Error as e:
+            logger.error(e)
+            return None
+        return res
 
 def get_course() -> Course:
     return Course(database_connection)
