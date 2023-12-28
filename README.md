@@ -23,6 +23,12 @@ pip freeze > requirements.txt
 pylint --recurisve=y app
 ```
 
+### test code
+```
+# test file in app/tests
+pytest
+```
+
 ### docs
 
 - [fastapi](https://fastapi.tiangolo.com/zh/)
