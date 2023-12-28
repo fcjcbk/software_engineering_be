@@ -1,5 +1,5 @@
 mysql:
   host: 127.0.0.1
   user: root             # database username
-  password: s14-04-2014  # database password
-  database: oj           # data
+  password:              # database password
+  database: oj           # database name
