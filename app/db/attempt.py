@@ -37,7 +37,7 @@ class attempt:
         return res
 
     def get_attempt(self, problemid: int, studentid: int) -> attemptModel | None:
-        logger.info("get_attempt: %d, %d", problemid, studentid)
+        logger.info("get_attempt: problemid=%d, studentid=%d", problemid, studentid)
 
         query: str = """
         SELECT problemid, studentid, point, content
@@ -56,6 +56,9 @@ class attempt:
             return None
 
         problemid, studentid, point, content = row
+
+        logger.info("get attempt res: problemid=%d, studentid=%d, point=%f, content=%s",
+                    problemid, studentid, point, content)
         return attemptModel(
             problemid=int(problemid),
             studentid=int(studentid),
@@ -142,7 +145,7 @@ class attempt:
         return True
 
     def delete_attempt(self, problemid: int, studentid: int) -> bool:
-        logger.info("delete_attempt: %d %d", problemid, studentid)
+        logger.info("delete_attempt: problemid=%d sudentid=%d", problemid, studentid)
 
         query: str = "DELETE FROM attempt WHERE problemid = %(problemid)s AND studentid = %(studentid)s"
         cursor = self.database_connect.cursor()

@@ -55,7 +55,7 @@ async def create_solution(
     ok: bool = store_solution.create_solution(insert_solution)
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Create solution failed",
         )
     return True
@@ -69,7 +69,7 @@ async def delete_solution(
     ok: bool = store_solution.delete_solution(solutionid)
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Delete solution failed",
         )
     return True

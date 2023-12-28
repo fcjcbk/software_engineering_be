@@ -46,12 +46,13 @@ class Solution:
                 author=str(author)
             ) for (solutionid, name, author) in cursor
         ]
+
+        logger.info("get_solution_by_problemid %d res: %s", problemid, res)
         return res
 
 
     def create_solution(self, solution: solutionModel) -> bool:
-        logger.info("create_solution: %s", solution.content)
-
+        logger.info("create_solution: %s", solution)
         query: str = """
         INSERT INTO solution (name, content, problemid, contributorid)
         VALUES (%(name)s, %(content)s, %(problemid)s, %(contributorid)s)
@@ -104,6 +105,8 @@ class Solution:
                 author=str(author),
             ) for (solutionid, name, content, author) in cursor
         ]
+
+        logger.info("get_solution_by_solutionid %d res: %s", solutionid, res)
         if len(res) == 0:
             return None
         return res[0]

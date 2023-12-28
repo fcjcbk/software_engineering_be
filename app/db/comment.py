@@ -46,6 +46,8 @@ class comment:
                 contributorid=int(contributorid)
             ) for (commentid, content, createAt, solutionid, contributorid) in cursor
         ]
+
+        logger.info("get_comment_by_solutionid res: %s", res)
         return res
 
     def get_comment_by_id(self, commentid: int) -> Union[commentModel, None]:
@@ -67,6 +69,9 @@ class comment:
                 contributorid=int(contributorid)
             ) for (commentid, content, createAt, solutionid, contributorid) in cursor
         ]
+
+        logger.info("get_comment_by_id res: %s", res)
+
         if len(res) == 0:
             return None
         return res[0]
@@ -131,6 +136,8 @@ class comment:
                 contributorrole=int(contributorrole)
             ) for (commentid, content, createAt, solutionid, contributorid, contributorname, contributorrole) in cursor
         ]
+
+        logger.info("get_comment_by_solutionid_rep %d res: %s", solutionid, res)
         return res
 
 def get_comment():

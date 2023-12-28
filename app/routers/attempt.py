@@ -76,8 +76,8 @@ async def create_attempt(
     ok: bool = store_attempt.create_attempt(insert_attempt)
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Create attempt failed",
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            detail="Create attempt failed attempt may already exist",
         )
     return True
 
@@ -109,7 +109,7 @@ async def stu_update_attempt(
     ok: bool = store_attempt.update_attempt_content(insert_attempt)
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Update attempt failed",
         )
     return True
@@ -143,7 +143,7 @@ async def teacher_update_attempt(
     ok: bool = store_attempt.update_attempt_point(insert_attempt)
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Update attempt failed",
         )
     return True
@@ -166,7 +166,7 @@ async def delete_attempt(
     ok: bool = store_attempt.delete_attempt(problemid, studentid)
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Delete attempt failed",
         )
     return True

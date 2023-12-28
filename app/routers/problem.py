@@ -106,7 +106,7 @@ async def create_problem(
     ok: bool = store_problem.create_problem(insert_problem)
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Create problem failed",
         )
     return True
@@ -125,7 +125,7 @@ async def delete_problem(
     ok: bool = store_problem.delete_problem(problemid)
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Delete problem failed",
         )
     return True

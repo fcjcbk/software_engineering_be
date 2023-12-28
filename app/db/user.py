@@ -37,6 +37,8 @@ class User:
                 major=str(major)
             ) for (userid, username, password, email, role, telephone, major) in cursor
         ]
+
+        logger.info("get_users res: %s", res)
         return res
 
     def get_user_by_id(self, userid: int) -> Union[UserModel, None]:
@@ -47,10 +49,10 @@ class User:
         if row is None:
             return None
 
-        userid, username, password, email, role, telephone, major = row
+        new_userid, username, password, email, role, telephone, major = row
 
         user = UserModel(
-            userid=int(userid),
+            userid=int(new_userid),
             username=str(username),
             password=str(password),
             email=str(email),
@@ -58,10 +60,13 @@ class User:
             telephone=str(telephone),
             major=str(major)
         )
+
+        logger.info("get_user_by_id %d res: %s", userid, user)
         return user
 
 
     def insert_user(self, new_user: UserModel) -> bool:
+        logger.info("insert_user: %s", new_user)
         sql: str = """
         INSERT INTO user (userid, username, password, email, role, telephone, major) 
         VALUES (%(userid)s, %(username)s, %(password)s, %(email)s, %(role)s, %(telephone)s, %(major)s)
@@ -77,6 +82,8 @@ class User:
 
 
     def update_user(self, new_user: UserModel) -> bool:
+
+        logger.info("update_user: %s", new_user)
         sql: str = """
             UPDATE user 
             SET username = %(username)s, 
@@ -121,6 +128,8 @@ class User:
             telephone=str(telephone),
             major=str(major)
         )
+
+        logger.info("get_user_by_email %s res: %s", email, user)
         return user
 
 

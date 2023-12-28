@@ -32,10 +32,12 @@ class Homework:
                 courseid=int(courseid)
             ) for (homeworkid, homeworkname, duedate, courseid) in cursor
         ]
+
+        logger.info("get_homework_by_course %d res: %s", courseid, res)
         return res
 
     def create_homework(self, homework: homeworkModel) -> bool:
-        logger.info("create_homework: %s", homework.homeworkname)
+        logger.info("create_homework: %s", homework)
 
         query: str = """
         INSERT INTO homework (homeworkname, duedate, courseid)

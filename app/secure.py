@@ -6,8 +6,9 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from app.logger import get_logger
 
-
+logger = get_logger(__name__)
 # to get a string like this run:
 # openssl rand -hex 32
 SECRET_KEY = "c2a3b9ba08bca5150fd3f88515debd81d39e79a865a1e96069d8a9516e934a1f"
@@ -60,7 +61,9 @@ async def decode_token(token: str = Depends(oauth2_scheme)) -> TokenData:
             raise credentials_exception
         token_data = TokenData(userid=int(token_str[1:]), role=int(token_str[0]))
     except JWTError as exc:
+        logger.info("token invalid: %s", token)
         raise credentials_exception from exc
+
     return token_data
 
 

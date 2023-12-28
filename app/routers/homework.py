@@ -45,7 +45,7 @@ async def create_homework(
     ok: bool = store_homework.create_homework(insert_homework)
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Create homework failed",
         )
     return True
@@ -64,7 +64,7 @@ async def delete_homework(
     ok: bool = store_homework.delete_homework(homeworkid)
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Delete homework failed",
         )
     return True

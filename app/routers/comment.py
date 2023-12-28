@@ -52,7 +52,7 @@ async def create_comment(
 
     if res is False:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="create comment fail",
         )
     return res
@@ -82,7 +82,7 @@ async def delete_comment(
 
     if res is False:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="delete comment fail",
         )
     return res

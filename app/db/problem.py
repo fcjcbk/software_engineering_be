@@ -47,6 +47,8 @@ class problem:
                 iscorrect=bool(iscorrect)
             ) for (choiceid, content, problemid, label, iscorrect) in cursor
         ]
+
+        logger.info("get_choice_by_problemid %d res: %s", problemid, res)
         return res
 
 
@@ -74,6 +76,8 @@ class problem:
                 choice=self.get_choice_by_problemid(problemid)
             ) for (problemid, name, problemType, content, point, difficult, homeworkid) in row
         ]
+
+        logger.info("get_problem_by_homeworkid %d res: %s", homeworkid, res)
         return res
 
     def get_problem_by_id(self, problemid: int) -> Union[problemModel, None]:
@@ -101,7 +105,7 @@ class problem:
             ) for (problemid, name, problemType, content, point, difficult, homeworkid) in row
         ]
 
-
+        logger.info("get_problem_by_id %d res: %s", problemid, res)
         if len(res) == 0:
             return None
         return res[0]

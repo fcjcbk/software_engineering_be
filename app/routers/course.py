@@ -54,7 +54,7 @@ async def create_course(
 
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Create course failed",
         )
     # Todo: may change response
@@ -76,7 +76,7 @@ async def delete_course(courseid: int,
 
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Delete course failed",
         )
     return ok
@@ -97,7 +97,7 @@ async def select_course(
 
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Select course failed",
         )
     return ok
@@ -116,7 +116,7 @@ async def cancel_course(
 
     if not ok:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="Cancel course failed",
         )
     return ok

@@ -42,6 +42,8 @@ class Course:
                 teacherid=int(teacherid)
             ) for (courseid, name, info, teacherid) in cursor
         ]
+
+        logger.info("get_course_by_student_id %d res: %s", userid, res)
         return res
 
     def get_course_by_teacher_id(self, teacherid: int) -> list[courseModel]:
@@ -58,6 +60,8 @@ class Course:
                 teacherid=int(teacherid)
             ) for (courseid, name, info, teacherid) in cursor
         ]
+
+        logger.info("get_course_by_teacher_id %d res: %s", teacherid, res)
         return res
 
     def create_course(self, course: courseModel) -> bool:
