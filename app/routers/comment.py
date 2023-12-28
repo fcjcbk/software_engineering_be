@@ -14,7 +14,7 @@ comment_router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-@comment_router.get("solution/{solutionid}")
+@comment_router.get("/solution/{solutionid}")
 async def get_comment_by_solutionid(
     solutionid: int,
     notuse: secure.TokenData = Depends(secure.decode_token),
