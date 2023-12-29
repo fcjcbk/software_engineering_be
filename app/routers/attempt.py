@@ -69,7 +69,7 @@ async def create_attempt(
     insert_attempt: attempt.attemptModel = attempt.attemptModel(
         problemid=new_attempt.problemid,
         studentid=tokenData.userid,
-        point=0,
+        point=-1,
         content=new_attempt.content
     )
 
