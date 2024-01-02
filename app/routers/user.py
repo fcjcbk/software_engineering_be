@@ -65,6 +65,7 @@ async def login(form_data: login_request, response_model=secure.Token) -> secure
     token: secure.Token = secure.create_token(
         secure.TokenData(userid=usr.userid, role=usr.role)
     )
+    logger.info("Login success: %s", token)
     return token
 
 @verify_router.post("/token", response_model=secure.Token)

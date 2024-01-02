@@ -57,7 +57,7 @@ class attempt:
 
         problemid, studentid, point, content = row
 
-        logger.info("get attempt res: problemid=%d, studentid=%d, point=%f, content=%s",
+        logger.info("get attempt res: problemid=%d, studentid=%s, point=%f, content=%s",
                     problemid, studentid, point, content)
         return attemptModel(
             problemid=int(problemid),
